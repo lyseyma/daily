@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "928303718446",
+    "project_id": "daily-7f1be",
+    "storage_bucket": "daily-7f1be.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928303718446:android:3344cddc9e6068306c3fbf",
+        "android_client_info": {
+          "package_name": "com.kh.daily"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyzUm7y8PvOJXuEOquA8BeIiWD9M454NM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -26,6 +26,60 @@ import android.content.Context
 import androidx.compose.ui.platform.LocalContext
 import com.kh.daily.R
 import androidx.core.content.edit
+import com.kh.daily.widget.receiver.TaskWidgetReceiver
+import com.kh.daily.widget.data.Task
+import android.util.Log
+
+/**
+ * Loads tasks from SharedPreferences on app startup.
+ * This ensures tasks are available even when offline or when Firebase fails.
+ */
+private fun loadTasksFromPrefs(context: Context): List<Task> {
+    return try {
+        val prefs = context.getSharedPreferences("task_prefs", Context.MODE_PRIVATE)
+        val taskListJson = prefs.getString("task_list", "[]") ?: "[]"
+        val gson = Gson()
+        val type = object : com.google.gson.reflect.TypeToken<List<Task>>() {}.type
+        val tasks: List<Task> = gson.fromJson(taskListJson, type) ?: emptyList()
+        Log.d("TaskListScreen", "Loaded ${tasks.size} tasks from SharedPreferences")
+        tasks
+    } catch (e: Exception) {
+        Log.e("TaskListScreen", "Error loading tasks from SharedPreferences: ${e.message}")
+        emptyList()
+    }
+}
+
+/**
+ * Saves tasks to SharedPreferences for persistence.
+ * This ensures tasks are always available locally.
+ */
+private fun saveTasksToPrefs(context: Context, tasks: List<Task>) {
+    try {
+        val prefs = context.getSharedPreferences("task_prefs", Context.MODE_PRIVATE)
+        val gson = Gson()
+        val taskListJson = gson.toJson(tasks)
+        prefs.edit {
+            putString("task_list", taskListJson)
+            putLong("tasks_last_updated", System.currentTimeMillis())
+        }
+        Log.d("TaskListScreen", "Saved ${tasks.size} tasks to SharedPreferences")
+    } catch (e: Exception) {
+        Log.e("TaskListScreen", "Error saving tasks to SharedPreferences: ${e.message}")
+    }
+}
+
+/**
+ * Notifies the widget to update when task data changes.
+ * This function triggers a refresh of all widget instances.
+ */
+private fun notifGlanceWidget(context: Context) {
+    try {
+        Log.d("TaskListScreen", "Notifying widget of data changes")
+        TaskWidgetReceiver.updateAllWidgets(context)
+    } catch (e: Exception) {
+        Log.e("TaskListScreen", "Error notifying widget: ${e.message}")
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,26 +93,49 @@ fun TaskList(
     var showAddTaskDialog by remember { mutableStateOf(false) }
     var taskTitle by remember { mutableStateOf("") }
     val context = LocalContext.current
-    val prefs = context.getSharedPreferences("task_prefs", Context.MODE_PRIVATE)
-    val gson = remember { Gson() }
 
+    // Load tasks from SharedPreferences on first composition
     LaunchedEffect(Unit) {
-        viewModel.fetchTasksIfNeeded()
+        val savedTasks = loadTasksFromPrefs(context)
+        if (savedTasks.isNotEmpty()) {
+            // If we have saved tasks, use them first while loading from Firebase
+            Log.d(
+                "TaskListScreen",
+                "Using ${savedTasks.size} saved tasks while loading from Firebase"
+            )
+        }
+        viewModel.fetchTasksIfNeeded(context)
     }
 
+    // Save tasks to SharedPreferences and notify widget when tasks change
     LaunchedEffect(tasks) {
-        prefs.edit { putString("task_list", gson.toJson(tasks)) }
+        if (tasks.isNotEmpty()) {
+            saveTasksToPrefs(context, tasks)
+            notifGlanceWidget(context)
+        }
     }
 
     if (showAddTaskDialog) {
         AddTaskDialog(
             title = taskTitle,
             onTitleChange = { taskTitle = it },
-            onDismiss = { showAddTaskDialog = false },
-            onConfirm = {
-                // TODO: Add task to viewModel
-                taskTitle = ""
+            onDismiss = {
+            taskTitle = ""
                 showAddTaskDialog = false
+            },
+            onConfirm = {
+                if (taskTitle.isNotBlank()) {
+                    val newTask = Task(
+                        title = taskTitle.trim(),
+                        description = "",
+                        category = "",
+                        dueDate = "",
+                        isCompleted = false
+                    )
+                    viewModel.createTask(newTask, context)
+                    taskTitle = ""
+                    showAddTaskDialog = false
+                }
             }
         )
     }
@@ -103,21 +180,43 @@ fun TaskList(
             )
 
             // Scrollable content
-
-            if (isLoading){
-                LazyColumn {
-                    items(5) {
-                        ShimmerLoadingList()
+            if (isLoading) {
+                // Show shimmer loading while fetching from Firebase, but also check for saved tasks
+                val savedTasks = remember { loadTasksFromPrefs(context) }
+                if (savedTasks.isNotEmpty()) {
+                    // Show saved tasks while loading
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(savedTasks) { task ->
+                            TaskCard(navController, task)
+                        }
+                    }
+                } else {
+                    // Show shimmer if no saved tasks
+                    LazyColumn {
+                        items(5) {
+                            ShimmerLoadingList()
+                        }
                     }
                 }
-            }else{
-
+            } else {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize()
                 ) {
-
                     items(tasks) { task ->
                         TaskCard(navController, task)
+                    }
+
+                    // Show message if no tasks
+                    if (tasks.isEmpty()) {
+                        item {
+                            Text(
+                                text = "No tasks yet. Tap + to add your first task!",
+                                color = Color.Gray,
+                                modifier = Modifier.padding(16.dp)
+                            )
+                        }
                     }
                 }
             }

@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.kh.dilywidgtet"
+    namespace = "com.kh.daily.widget"
     compileSdk = 36
 
     defaultConfig {
@@ -31,11 +31,11 @@ android {
         kotlinCompilerExtensionVersion = "1.5.15" // match your Compose version
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 }
 
@@ -44,8 +44,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.glance.appwidget)
-    implementation(libs.play.services.tasks)
-    implementation(libs.google.firebase.firestore.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.compose.runtime)
     testImplementation(libs.junit)

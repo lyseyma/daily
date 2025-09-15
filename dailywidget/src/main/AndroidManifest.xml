@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application>
+        <!-- 
+            Legacy widget provider - can be removed if not needed
+            This was the original widget implementation using traditional Views
+        -->
         <receiver
             android:name=".DailyWidgetProvider"
             android:label="My Widget"
@@ -14,8 +18,14 @@
                 android:resource="@xml/daily_widget_into" />
         </receiver>
 
-        <receiver android:name=".receiver.TaskWidgetReceiver"
-            android:label="Task List"
+        <!--
+            Modern Glance-based task widget
+            This widget displays tasks from the main app using Jetpack Glance
+            Package updated to avoid GMS security issues
+        -->
+        <receiver
+            android:name=".receiver.TaskWidgetReceiver"
+            android:label="Daily Task List"
             android:exported="true">
 
             <intent-filter>

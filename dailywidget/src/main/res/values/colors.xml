@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Widget colors matching the main app theme -->
+    <color name="colorPrimary">#FFBC8F8F</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="widget_background">@color/colorPrimary</color>
+    <color name="widget_text_primary">@color/white</color>
+    <color name="widget_text_secondary">#E0FFFFFF</color>
+</resources>

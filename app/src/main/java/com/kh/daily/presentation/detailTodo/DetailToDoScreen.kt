@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.kh.daily.R
-import com.kh.dilywidgtet.data.Task
+import com.kh.daily.widget.data.Task
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

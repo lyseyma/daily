@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.kh.daily.R
-import com.kh.dilywidgtet.data.Task
+import com.kh.daily.widget.data.Task
 import com.valentinilk.shimmer.shimmer
 
 @Composable

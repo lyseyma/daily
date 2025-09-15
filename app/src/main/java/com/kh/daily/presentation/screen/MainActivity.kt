@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kh.daily.presentation.Navigation
-import com.kh.dilywidgtet.data.Task
+import com.kh.daily.widget.data.Task
 import com.kh.daily.theme.MDailyTheme
 
 class MainActivity : ComponentActivity() {

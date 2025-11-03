@@ -11,7 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import com.kh.daily.presentation.detailTodo.DetailToDoScreen
 import com.kh.daily.presentation.login.LoginScreen
 import com.kh.daily.presentation.login.LoginViewModel
-import com.kh.daily.data.remote.task.TaskViewModel
+import com.kh.daily.presentation.taskList.TaskViewModel
 import com.kh.daily.presentation.taskList.TaskList
 import com.kh.daily.data.local.LoginRepository
 import com.kh.daily.data.local.TaskRepository

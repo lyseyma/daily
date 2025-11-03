@@ -1,9 +1,12 @@
-package com.kh.daily.data.remote.task
+package com.kh.daily.presentation.taskList
 
 import android.content.Context
 import android.util.Log
+import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.kh.daily.data.local.TaskRepository
 import com.kh.daily.widget.data.Task
 import com.kh.daily.widget.receiver.TaskWidgetReceiver
@@ -13,8 +16,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import com.google.gson.Gson
-import androidx.core.content.edit
 
 /**
  * TaskViewModel manages task data for the main application.
@@ -67,7 +68,7 @@ class TaskViewModel @Inject constructor(
             val prefs = context.getSharedPreferences("task_prefs", Context.MODE_PRIVATE)
             val taskListJson = prefs.getString("task_list", "[]") ?: "[]"
             val gson = Gson()
-            val type = object : com.google.gson.reflect.TypeToken<List<Task>>() {}.type
+            val type = object : TypeToken<List<Task>>() {}.type
             val tasks: List<Task> = gson.fromJson(taskListJson, type) ?: emptyList()
             Log.d("TaskViewModel", "Loaded ${tasks.size} tasks from SharedPreferences as fallback")
             tasks
@@ -83,7 +84,7 @@ class TaskViewModel @Inject constructor(
      */
     private fun updateWidgets(context: Context) {
         try {
-            TaskWidgetReceiver.updateAllWidgets(context)
+            TaskWidgetReceiver.Companion.updateAllWidgets(context)
             Log.d("TaskViewModel", "Triggered widget update")
         } catch (e: Exception) {
             Log.e("TaskViewModel", "Error updating widgets: ${e.message}")

@@ -15,7 +15,7 @@ firebasebom ="34.1.0"
 ksp = "2.1.0-1.0.29"
 runtimeLivedata = "1.9.0"
 firebaseAuthKtx = "23.2.1"
-material3 ="1.2.1"
+material3 ="1.4.0"
 material3Lint = "1.4.0-beta02"
 play-services-base = "18.7.2"
 play-services-auth = "21.4.0"
@@ -28,6 +28,10 @@ playServicesTasks = "18.3.2"
 firebaseFirestoreKtx = "25.1.4"
 firebaseDatabaseKtx = "22.0.0"
 composeRuntime = "1.4.0"
+foundationLayout = "1.9.1"
+foundation = "1.9.1"
+splashScreen = "1.0.1"
+dataStore = "1.1.7"
 
 
 [libraries]
@@ -66,7 +70,10 @@ play-services-tasks = { group = "com.google.android.gms", name = "play-services-
 google-firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
 firebase-database-ktx = { group = "com.google.firebase", name = "firebase-database-ktx", version.ref = "firebaseDatabaseKtx" }
 compose-runtime = { group = "androidx.compose.runtime" , name ="runtime" , version.ref= "composeRuntime"}
-
+androidx-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
+androidx-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
+androidx-core = {group = "androidx.core", name = "core-splashscreen", version.ref = "splashScreen"}
+androidx-datastore = {group = "androidx.datastore" , name = "datastore-preferences" , version.ref="dataStore"}
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

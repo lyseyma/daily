@@ -21,7 +21,7 @@
         tools:targetApi="tiramisu" >
 
     <activity
-        android:name=".ui.screens.screen.MainActivity"
+        android:name=".ui.screens.MainActivity"
         android:exported="true"
         android:theme="@style/Theme.Daily">
         <intent-filter>

@@ -1,6 +1,9 @@
 package com.kh.daily.navigtion
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -16,8 +19,10 @@ import com.kh.daily.ui.screens.taskList.TaskList
 import com.kh.daily.data.repositiory.LoginRepository
 import com.kh.daily.data.repositiory.TaskRepository
 
+@SuppressLint("ViewModelConstructorInComposable")
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Navigation(intent: Intent) {
+fun AppNavGraph(intent: Intent) {
     val navController = rememberNavController()
     val authRepository = LoginRepository()
     val taskRepository = TaskRepository()

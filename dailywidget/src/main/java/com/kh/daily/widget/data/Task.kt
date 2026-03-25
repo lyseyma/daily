@@ -65,3 +65,9 @@ data class Task(
         override fun newArray(size: Int): Array<Task?> = arrayOfNulls(size)
     }
 }
+
+data class TaskUiState(
+    val taskTitle: String = "",
+    val taskDescription: String = "",
+    val selectedDate: String = ""
+)

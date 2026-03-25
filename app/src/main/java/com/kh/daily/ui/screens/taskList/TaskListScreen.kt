@@ -117,6 +117,7 @@ fun TaskList(
     var taskDescription by remember { mutableStateOf("") }
     var selectedDate by remember { mutableStateOf("") }
     val context = LocalContext.current
+    val sortList = tasks.sortedByDescending { it.dueDate }
 
     // Load tasks from SharedPreferences on first composition
     LaunchedEffect(Unit) {
@@ -132,9 +133,9 @@ fun TaskList(
     }
 
     // Save tasks to SharedPreferences and notify widget when tasks change
-    LaunchedEffect(tasks) {
-        if (tasks.isNotEmpty()) {
-            saveTasksToPrefs(context, tasks)
+    LaunchedEffect(sortList) {
+        if (sortList.isNotEmpty()) {
+            saveTasksToPrefs(context, sortList)
             notifGlanceWidget(context)
         }
     }
@@ -234,7 +235,7 @@ fun TaskList(
                 LazyColumn(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    items(tasks) { task ->
+                    items(sortList) { task ->
                         TaskCard(navController, task)
                     }
 

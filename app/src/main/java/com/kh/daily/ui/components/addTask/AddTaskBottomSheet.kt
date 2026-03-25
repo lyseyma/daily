@@ -39,6 +39,8 @@ import androidx.compose.ui.unit.sp
 import com.kh.daily.R
 import com.kh.daily.ui.components.popup.DatePickerDialog
 import com.kh.daily.ui.theme.MDailyTheme
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,6 +57,11 @@ fun AddTaskBottomSheet(
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by remember { mutableStateOf(false) }
+
+    val formatter = DateTimeFormatter.ofPattern("d MMM yyyy", java.util.Locale.ENGLISH)
+    val today = LocalDate.now()
+    val displayDate = selectedDate.ifEmpty { today.format(formatter) }
+
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         containerColor = colorResource(id = R.color.colorPrimary), // Coral/salmon background color from design
@@ -143,8 +150,8 @@ fun AddTaskBottomSheet(
 
             // Deadline (Optional) field
             OutlinedTextField(
-                value = selectedDate,
-                onValueChange = { onSelectedDateChange },
+                value = displayDate,
+                onValueChange = { onSelectedDateChange(it) },
                 placeholder = {
                     Text(
                         "Deadline (Optional)",
@@ -238,7 +245,7 @@ fun AddTaskBottomSheet(
     // DatePicker Dialog
     if (showBottomSheet) {
         DatePickerDialog(
-            initialDate = selectedDate,
+            initialDate = displayDate,
             onDateSelected = { date ->
                 onSelectedDateChange(date)
                 showBottomSheet = false
